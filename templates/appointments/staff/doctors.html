@@ -1,0 +1,37 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Doctors{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Admin</p>
+            <h1>Doctors</h1>
+        </div>
+        <a class="button primary" href="{% url 'staff_doctor_create' %}">Add doctor</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Name</th><th>Specialization</th><th>Phone</th><th>Email</th><th>Active</th><th></th></tr></thead>
+            <tbody>
+                {% for doctor in doctors %}
+                    <tr>
+                        <td>{{ doctor.name }}</td>
+                        <td>{{ doctor.specialization }}</td>
+                        <td>{{ doctor.phone|default:"-" }}</td>
+                        <td>{{ doctor.email|default:"-" }}</td>
+                        <td>{% if doctor.is_active %}Yes{% else %}No{% endif %}</td>
+                        <td class="row-actions">
+                            <a class="button small" href="{% url 'staff_doctor_update' doctor.pk %}">Edit</a>
+                            <a class="button small danger" href="{% url 'staff_doctor_delete' doctor.pk %}">Delete</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6" class="empty">No doctors yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

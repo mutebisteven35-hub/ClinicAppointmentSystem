@@ -1,0 +1,35 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Feedback{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Admin</p>
+            <h1>Patient feedback</h1>
+        </div>
+    </div>
+    <div class="stack-list">
+        {% for item in feedback %}
+            <article class="list-item">
+                <div>
+                    <strong>{{ item.subject }}</strong>
+                    <span>{{ item.patient.get_full_name|default:item.patient.username }} - {{ item.created_at|date:"M d, Y H:i" }}</span>
+                    <p>{{ item.message }}</p>
+                </div>
+                {% if item.is_read %}
+                    <span class="badge completed">Read</span>
+                {% else %}
+                    <form method="post" action="{% url 'staff_feedback_mark_read' item.pk %}">
+                        {% csrf_token %}
+                        <button class="button small" type="submit">Mark read</button>
+                    </form>
+                {% endif %}
+            </article>
+        {% empty %}
+            <p class="empty">No feedback yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

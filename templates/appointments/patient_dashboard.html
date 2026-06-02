@@ -1,0 +1,64 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<section class="section-heading">
+    <div>
+        <p class="eyebrow">Patient dashboard</p>
+        <h1>Welcome, {{ user.first_name|default:user.username }}</h1>
+    </div>
+    <a class="button primary" href="{% url 'book_appointment' %}">Book appointment</a>
+</section>
+
+<section class="summary-grid three">
+    <div class="stat-card"><span class="stat-number">{{ pending_count }}</span><span class="stat-label">Pending</span></div>
+    <div class="stat-card"><span class="stat-number">{{ approved_count }}</span><span class="stat-label">Approved</span></div>
+    <div class="stat-card"><span class="stat-number">{{ history_count }}</span><span class="stat-label">Medical records</span></div>
+</section>
+
+<section class="content-grid">
+    <div class="panel">
+        <div class="section-heading compact">
+            <h2>Upcoming appointments</h2>
+            <a href="{% url 'patient_appointments' %}">View all</a>
+        </div>
+        {% if appointments %}
+            <div class="stack-list">
+                {% for appointment in appointments %}
+                    <article class="list-item">
+                        <div>
+                            <strong>{{ appointment.doctor }}</strong>
+                            <span>{{ appointment.date }} at {{ appointment.time|time:"H:i" }}</span>
+                        </div>
+                        <span class="badge {{ appointment.status|lower }}">{{ appointment.status }}</span>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty">No upcoming appointments.</p>
+        {% endif %}
+    </div>
+
+    <div class="panel">
+        <div class="section-heading compact">
+            <h2>Recent medical records</h2>
+            <a href="{% url 'patient_medical_history' %}">View all</a>
+        </div>
+        {% if records %}
+            <div class="stack-list">
+                {% for record in records %}
+                    <article class="list-item">
+                        <div>
+                            <strong>{{ record.diagnosis }}</strong>
+                            <span>{{ record.visit_date }} with {{ record.doctor.name }}</span>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty">No medical history records yet.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

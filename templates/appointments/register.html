@@ -1,0 +1,22 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Register Patient{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Patient account</p>
+            <h1>Register</h1>
+        </div>
+        <a class="button" href="{% url 'login' %}">Login instead</a>
+    </div>
+    <form method="post" class="form-grid two-col">
+        {% csrf_token %}
+        {% include 'appointments/partials_form_fields.html' %}
+        <div class="form-actions">
+            <button class="button primary" type="submit">Create account</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

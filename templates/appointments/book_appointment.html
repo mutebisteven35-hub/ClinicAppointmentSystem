@@ -1,0 +1,22 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Book Appointment{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Appointments</p>
+            <h1>Book an appointment</h1>
+        </div>
+        <a class="button" href="{% url 'doctor_schedules' %}">View schedules</a>
+    </div>
+    <form method="post" class="form-grid">
+        {% csrf_token %}
+        {% include 'appointments/partials_form_fields.html' %}
+        <div class="form-actions">
+            <button class="button primary" type="submit">Send request</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

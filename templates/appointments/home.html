@@ -1,0 +1,35 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Clinic Appointment System{% endblock %}
+
+{% block content %}
+<section class="panel split-panel">
+    <div>
+        <h1 class="home-main-title">Medical Clinic Appointment Booking</h1>
+        <p class="home-subtitle">Book appointments and manage clinic records in one system.</p>
+        <p class="lead">Patients can register, view doctor schedules, request appointments, and send feedback. Clinic staff can approve appointments, manage doctors, update schedules, and keep medical history records.</p>
+        <div class="actions">
+            <a class="button primary" href="{% url 'register' %}">Create patient account</a>
+            <a class="button" href="{% url 'login' %}">Login</a>
+        </div>
+    </div>
+    <div class="summary-grid">
+        <div class="stat-card">
+            <span class="stat-number">{{ doctor_count }}</span>
+            <span class="stat-label">Active doctors</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ schedule_count }}</span>
+            <span class="stat-label">Available schedules</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">SQLite</span>
+            <span class="stat-label">Database</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">Django</span>
+            <span class="stat-label">Framework</span>
+        </div>
+    </div>
+</section>
+{% endblock %}

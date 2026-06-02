@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+db.sqlite3
+runserver*.log
+.env
+.env.*
+staticfiles/
+media/
+screenshots/
+.DS_Store
+Thumbs.db

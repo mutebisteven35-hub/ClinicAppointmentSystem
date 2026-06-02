@@ -1,0 +1,34 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Medical Records{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Admin</p>
+            <h1>Medical history records</h1>
+        </div>
+        <a class="button primary" href="{% url 'staff_history_create' %}">Add record</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Diagnosis</th><th>Treatment</th><th></th></tr></thead>
+            <tbody>
+                {% for record in records %}
+                    <tr>
+                        <td>{{ record.patient.get_full_name|default:record.patient.username }}</td>
+                        <td>{{ record.doctor.name }}</td>
+                        <td>{{ record.visit_date }}</td>
+                        <td>{{ record.diagnosis }}</td>
+                        <td>{{ record.treatment }}</td>
+                        <td><a class="button small" href="{% url 'staff_history_update' record.pk %}">Edit</a></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6" class="empty">No records yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

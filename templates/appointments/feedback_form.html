@@ -1,0 +1,19 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Send Feedback{% endblock %}
+
+{% block content %}
+<section class="panel narrow">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Feedback</p>
+            <h1>Send message</h1>
+        </div>
+    </div>
+    <form method="post" class="form-grid">
+        {% csrf_token %}
+        {% include 'appointments/partials_form_fields.html' %}
+        <button class="button primary" type="submit">Send feedback</button>
+    </form>
+</section>
+{% endblock %}

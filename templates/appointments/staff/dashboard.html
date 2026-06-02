@@ -1,0 +1,46 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Staff Dashboard{% endblock %}
+
+{% block content %}
+<section class="section-heading">
+    <div>
+        <p class="eyebrow">Admin management dashboard</p>
+        <h1>Clinic dashboard</h1>
+    </div>
+    <a class="button primary" href="{% url 'staff_appointments' %}?status=Pending">Review pending</a>
+</section>
+
+<section class="summary-grid five">
+    <div class="stat-card"><span class="stat-number">{{ pending_count }}</span><span class="stat-label">Pending</span></div>
+    <div class="stat-card"><span class="stat-number">{{ today_count }}</span><span class="stat-label">Today</span></div>
+    <div class="stat-card"><span class="stat-number">{{ patient_count }}</span><span class="stat-label">Patients</span></div>
+    <div class="stat-card"><span class="stat-number">{{ doctor_count }}</span><span class="stat-label">Doctors</span></div>
+    <div class="stat-card"><span class="stat-number">{{ unread_feedback_count }}</span><span class="stat-label">Unread feedback</span></div>
+</section>
+
+<section class="panel">
+    <div class="section-heading compact">
+        <h2>Pending appointments</h2>
+        <a href="{% url 'staff_appointments' %}">View all</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th></th></tr></thead>
+            <tbody>
+                {% for appointment in pending %}
+                    <tr>
+                        <td>{{ appointment.patient.get_full_name|default:appointment.patient.username }}</td>
+                        <td>{{ appointment.doctor.name }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time|time:"H:i" }}</td>
+                        <td><a class="button small" href="{% url 'staff_appointment_detail' appointment.pk %}">Open</a></td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5" class="empty">No pending appointments.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

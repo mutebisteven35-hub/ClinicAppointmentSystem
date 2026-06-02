@@ -1,0 +1,17 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Medical Record Form{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <p class="eyebrow">Medical history</p>
+    <h1>{% if object %}Edit record{% else %}Add record{% endif %}</h1>
+    <form method="post" class="form-grid two-col">
+        {% csrf_token %}
+        {% include 'appointments/partials_form_fields.html' %}
+        <div class="form-actions">
+            <button class="button primary" type="submit">Save record</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Appointment Detail{% endblock %}
+
+{% block content %}
+<section class="content-grid">
+    <div class="panel">
+        <p class="eyebrow">Appointment</p>
+        <h1>{{ appointment.patient.get_full_name|default:appointment.patient.username }}</h1>
+        <dl class="details">
+            <div><dt>Doctor</dt><dd>{{ appointment.doctor }}</dd></div>
+            <div><dt>Date</dt><dd>{{ appointment.date }}</dd></div>
+            <div><dt>Time</dt><dd>{{ appointment.time|time:"H:i" }}</dd></div>
+            <div><dt>Status</dt><dd><span class="badge {{ appointment.status|lower }}">{{ appointment.status }}</span></dd></div>
+            <div><dt>Reason</dt><dd>{{ appointment.reason }}</dd></div>
+        </dl>
+    </div>
+    <div class="panel">
+        <h2>Update status</h2>
+        <form method="post" class="form-grid">
+            {% csrf_token %}
+            {% include 'appointments/partials_form_fields.html' %}
+            <button class="button primary" type="submit">Save appointment</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

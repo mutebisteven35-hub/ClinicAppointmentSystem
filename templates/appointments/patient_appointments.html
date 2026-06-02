@@ -1,0 +1,43 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Patient</p>
+            <h1>My appointments</h1>
+        </div>
+        <a class="button primary" href="{% url 'book_appointment' %}">Book appointment</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Reason</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.doctor.name }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time|time:"H:i" }}</td>
+                        <td><span class="badge {{ appointment.status|lower }}">{{ appointment.status }}</span></td>
+                        <td>{{ appointment.reason|truncatechars:60 }}</td>
+                        <td>
+                            {% if appointment.status == 'Pending' or appointment.status == 'Approved' %}
+                                <form method="post" action="{% url 'cancel_appointment' appointment.pk %}">
+                                    {% csrf_token %}
+                                    <button class="button small danger" type="submit">Cancel</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="6" class="empty">No appointments yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

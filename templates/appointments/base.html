@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Clinic Appointment System{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'appointments/styles.css' %}">
+</head>
+<body>
+    <header class="app-header">
+        <a class="brand" href="{% url 'home' %}">
+            <span class="brand-mark">+</span>
+            <span>Clinic Appointments</span>
+        </a>
+        <nav class="nav">
+            {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                    <a href="{% url 'staff_dashboard' %}">Dashboard</a>
+                    <a href="{% url 'staff_appointments' %}">Appointments</a>
+                    <a href="{% url 'staff_doctors' %}">Doctors</a>
+                    <a href="{% url 'staff_schedules' %}">Schedules</a>
+                    <a href="{% url 'staff_medical_history' %}">History</a>
+                    <a href="{% url 'staff_feedback' %}">Feedback</a>
+                {% else %}
+                    <a href="{% url 'patient_dashboard' %}">Dashboard</a>
+                    <a href="{% url 'book_appointment' %}">Book</a>
+                    <a href="{% url 'doctor_schedules' %}">Schedules</a>
+                    <a href="{% url 'patient_appointments' %}">Appointments</a>
+                    <a href="{% url 'patient_medical_history' %}">History</a>
+                    <a href="{% url 'patient_feedback' %}">Feedback</a>
+                {% endif %}
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="link-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a class="nav-button" href="{% url 'register' %}">Register</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="page">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

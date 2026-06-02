@@ -1,0 +1,31 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}My Feedback{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <div class="section-heading">
+        <div>
+            <p class="eyebrow">Feedback</p>
+            <h1>My messages</h1>
+        </div>
+        <a class="button primary" href="{% url 'feedback_create' %}">New feedback</a>
+    </div>
+    <div class="stack-list">
+        {% for item in feedback %}
+            <article class="list-item">
+                <div>
+                    <strong>{{ item.subject }}</strong>
+                    <span>{{ item.created_at|date:"M d, Y H:i" }}</span>
+                    <p>{{ item.message }}</p>
+                </div>
+                <span class="badge {% if item.is_read %}completed{% else %}pending{% endif %}">
+                    {% if item.is_read %}Read{% else %}Unread{% endif %}
+                </span>
+            </article>
+        {% empty %}
+            <p class="empty">No feedback sent yet.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
