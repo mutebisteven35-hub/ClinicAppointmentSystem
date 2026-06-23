@@ -729,3 +729,204 @@ dd {
         grid-template-columns: 1fr;
     }
 }
+
+/* ── Homepage Hero ── */
+.home-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 48px 0 32px;
+    gap: 24px;
+}
+
+.home-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent-dark);
+    margin: 4px 0 12px;
+    line-height: 1.15;
+}
+
+.home-subtitle {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 520px;
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.home-stats {
+    display: flex;
+    gap: 32px;
+}
+
+.home-stat-num {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+.home-stat-label {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.home-hero-icon {
+    font-size: 120px;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+/* ── Workspace Selection ── */
+.workspace-section {
+    padding: 8px 0 48px;
+}
+
+.workspace-heading {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin-bottom: 6px;
+}
+
+.workspace-subheading {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 32px;
+    font-size: 15px;
+}
+
+.workspace-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.workspace-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 32px 28px;
+    border: 2px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.workspace-card:hover {
+    box-shadow: 0 8px 32px rgba(37,99,168,0.12);
+}
+
+.workspace-card.patient:hover { border-color: #2563eb; }
+.workspace-card.doctor:hover  { border-color: #059669; }
+.workspace-card.staff:hover   { border-color: #7c3aed; }
+
+.workspace-icon {
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.workspace-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text);
+}
+
+.workspace-card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.workspace-features {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.workspace-features li {
+    font-size: 13px;
+    color: var(--text);
+}
+
+.workspace-actions {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.button.full {
+    width: 100%;
+    text-align: center;
+    display: block;
+    box-sizing: border-box;
+}
+
+/* ── Role-specific portal login ── */
+.portal-login-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+.portal-login-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 2px solid var(--line);
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.portal-login-card.patient { border-top: 4px solid #2563eb; }
+.portal-login-card.doctor  { border-top: 4px solid #059669; }
+.portal-login-card.staff   { border-top: 4px solid #7c3aed; }
+
+.portal-login-icon {
+    font-size: 52px;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.portal-login-card h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.portal-back {
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+@media (max-width: 860px) {
+    .workspace-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .home-hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 28px 0 20px;
+    }
+
+    .home-stats {
+        justify-content: center;
+    }
+
+    .home-hero-icon {
+        font-size: 72px;
+    }
+}

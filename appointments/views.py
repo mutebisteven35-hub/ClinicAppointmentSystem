@@ -1,10 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import login
+from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 
 from .forms import (
@@ -24,9 +25,11 @@ def staff_required(view_func):
 
 
 def home(request):
-    if request.user.is_authenticated and request.user.is_staff:
-        return redirect('staff_dashboard')
     if request.user.is_authenticated:
+        if request.user.is_staff:
+            return redirect('staff_dashboard')
+        if hasattr(request.user, 'doctor_profile'):
+            return redirect('doctor_dashboard')
         return redirect('patient_dashboard')
     return render(request, 'appointments/home.html', {
         'doctor_count': Doctor.objects.filter(is_active=True).count(),
@@ -369,3 +372,45 @@ def doctor_appointment_action(request, pk):
         else:
             messages.warning(request, 'Invalid action or appointment state.')
     return redirect('doctor_appointments')
+
+
+class PatientLoginView(auth_views.LoginView):
+    template_name = 'registration/login_patient.html'
+
+    def get_success_url(self):
+        user = self.request.user
+        if user.is_staff or hasattr(user, 'doctor_profile'):
+            from django.contrib import messages
+            from django.contrib.auth import logout
+            logout(self.request)
+            messages.error(self.request, 'This login is for patients only. Please use the correct portal.')
+            return reverse('login_patient')
+        return reverse('patient_dashboard')
+
+
+class DoctorLoginView(auth_views.LoginView):
+    template_name = 'registration/login_doctor.html'
+
+    def get_success_url(self):
+        user = self.request.user
+        if not hasattr(user, 'doctor_profile'):
+            from django.contrib.auth import logout
+            logout(self.request)
+            from django.contrib import messages
+            messages.error(self.request, 'This login is for doctors only. Please use the correct portal.')
+            return reverse('login_doctor')
+        return reverse('doctor_dashboard')
+
+
+class StaffLoginView(auth_views.LoginView):
+    template_name = 'registration/login_staff.html'
+
+    def get_success_url(self):
+        user = self.request.user
+        if not user.is_staff:
+            from django.contrib.auth import logout
+            logout(self.request)
+            from django.contrib import messages
+            messages.error(self.request, 'This login is for clinic staff only. Please use the correct portal.')
+            return reverse('login_staff')
+        return reverse('staff_dashboard')

@@ -3,59 +3,84 @@
 {% block title %}Clinic Appointment System{% endblock %}
 
 {% block content %}
-<section class="hero-section">
-    <div class="hero-content">
-        <p class="eyebrow">Your Health, Our Priority</p>
-        <h1 class="home-main-title">Medical Clinic Appointment Booking</h1>
-        <p class="home-subtitle">Book appointments and manage clinic records in one system.</p>
-        <p class="lead">Patients can register, view doctor schedules, request appointments, and send feedback. Clinic staff can approve appointments, manage doctors, update schedules, and keep medical history records.</p>
-        <div class="actions hero-actions">
-            <a class="button primary" href="{% url 'register' %}">Create patient account</a>
-            <a class="button" href="{% url 'login' %}">Login</a>
-        </div>
-    </div>
-    <div class="hero-visual">
-        <div class="hospital-card">
-            <div class="hospital-icon">🏥</div>
-            <h3>Welcome to Our Clinic</h3>
-            <p>Professional healthcare services at your fingertips.</p>
-            <div class="clinic-stats">
-                <div class="clinic-stat">
-                    <span class="clinic-stat-number">{{ doctor_count }}</span>
-                    <span class="clinic-stat-label">Active Doctors</span>
-                </div>
-                <div class="clinic-stat">
-                    <span class="clinic-stat-number">{{ schedule_count }}</span>
-                    <span class="clinic-stat-label">Available Slots</span>
-                </div>
+
+<!-- Hero -->
+<section class="home-hero">
+    <div class="home-hero-text">
+        <p class="eyebrow">Welcome to</p>
+        <h1 class="home-title">Clinic Appointment System</h1>
+        <p class="home-subtitle">Professional healthcare management — book appointments, manage doctors, and access your records securely.</p>
+        <div class="home-stats">
+            <div class="home-stat">
+                <span class="home-stat-num">{{ doctor_count }}</span>
+                <span class="home-stat-label">Active Doctors</span>
+            </div>
+            <div class="home-stat">
+                <span class="home-stat-num">{{ schedule_count }}</span>
+                <span class="home-stat-label">Available Slots</span>
             </div>
         </div>
     </div>
+    <div class="home-hero-icon">🏥</div>
 </section>
 
-<section class="features-section">
-    <h2 class="features-title">How It Works</h2>
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">📋</div>
-            <h3>Register</h3>
-            <p>Create your patient account quickly and securely to get started.</p>
+<!-- Workspace selection -->
+<section class="workspace-section">
+    <h2 class="workspace-heading">Who are you? Choose your portal</h2>
+    <p class="workspace-subheading">Each portal gives you access only to what you need.</p>
+
+    <div class="workspace-grid">
+
+        <!-- Patient -->
+        <div class="workspace-card patient">
+            <div class="workspace-icon">🧑‍⚕️</div>
+            <h3>Patient</h3>
+            <p>Book appointments, view your medical history, check doctor schedules, and send feedback.</p>
+            <ul class="workspace-features">
+                <li>✓ Book & cancel appointments</li>
+                <li>✓ View doctor schedules</li>
+                <li>✓ Access medical history</li>
+                <li>✓ Submit feedback</li>
+            </ul>
+            <div class="workspace-actions">
+                <a class="button primary full" href="{% url 'login_patient' %}">Login as Patient</a>
+                <a class="button full" href="{% url 'register' %}">New patient? Register</a>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">🗓️</div>
-            <h3>Book Appointment</h3>
-            <p>Browse doctor schedules and request an appointment at your preferred time.</p>
+
+        <!-- Doctor -->
+        <div class="workspace-card doctor">
+            <div class="workspace-icon">👨‍⚕️</div>
+            <h3>Doctor</h3>
+            <p>Review appointment requests from your patients, approve or cancel them, and track your schedule.</p>
+            <ul class="workspace-features">
+                <li>✓ View appointment requests</li>
+                <li>✓ Approve or cancel bookings</li>
+                <li>✓ Track today's schedule</li>
+                <li>✓ Mark appointments complete</li>
+            </ul>
+            <div class="workspace-actions">
+                <a class="button primary full" href="{% url 'login_doctor' %}">Login as Doctor</a>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">✅</div>
-            <h3>Get Confirmed</h3>
-            <p>Clinic staff review and approve your appointment request promptly.</p>
+
+        <!-- Staff -->
+        <div class="workspace-card staff">
+            <div class="workspace-icon">🏥</div>
+            <h3>Clinic Staff</h3>
+            <p>Manage doctors, schedules, patient records, appointment approvals, and feedback from one dashboard.</p>
+            <ul class="workspace-features">
+                <li>✓ Manage doctors & schedules</li>
+                <li>✓ Approve appointments</li>
+                <li>✓ Maintain medical records</li>
+                <li>✓ Review patient feedback</li>
+            </ul>
+            <div class="workspace-actions">
+                <a class="button primary full" href="{% url 'login_staff' %}">Login as Staff</a>
+            </div>
         </div>
-        <div class="feature-card">
-            <div class="feature-icon">🩺</div>
-            <h3>Visit the Doctor</h3>
-            <p>Attend your appointment and have your medical history safely recorded.</p>
-        </div>
+
     </div>
 </section>
+
 {% endblock %}
