@@ -1,82 +1,82 @@
 {% extends 'appointments/base.html' %}
-
 {% block title %}Clinic Appointment System{% endblock %}
-
 {% block content %}
 
-<!-- Hero -->
+<!-- Hero with hospital background -->
 <section class="home-hero">
-    <div class="home-hero-text">
-        <p class="eyebrow">Welcome to</p>
-        <h1 class="home-title">Clinic Appointment System</h1>
-        <p class="home-subtitle">Professional healthcare management — book appointments, manage doctors, and access your records securely.</p>
-        <div class="home-stats">
-            <div class="home-stat">
-                <span class="home-stat-num">{{ doctor_count }}</span>
-                <span class="home-stat-label">Active Doctors</span>
+    <div class="home-hero-bg"></div>
+    <div class="home-hero-content">
+        <p class="eyebrow" style="color:rgba(255,255,255,.6)">Healthcare Management System</p>
+        <h1>Clinic Appointment System</h1>
+        <p>Connecting patients, doctors, and clinic staff — seamlessly and securely.</p>
+        <div class="home-hero-stats">
+            <div class="hero-stat">
+                <span class="hero-stat-num">{{ doctor_count }}</span>
+                <span class="hero-stat-label">Active Doctors</span>
             </div>
-            <div class="home-stat">
-                <span class="home-stat-num">{{ schedule_count }}</span>
-                <span class="home-stat-label">Available Slots</span>
+            <div class="hero-divider"></div>
+            <div class="hero-stat">
+                <span class="hero-stat-num">{{ schedule_count }}</span>
+                <span class="hero-stat-label">Available Slots</span>
             </div>
         </div>
+        <p style="color:rgba(255,255,255,.7);font-size:14px;">Choose your portal below to get started ↓</p>
     </div>
-    <div class="home-hero-icon">🏥</div>
 </section>
 
-<!-- Workspace selection -->
-<section class="workspace-section">
-    <h2 class="workspace-heading">Who are you? Choose your portal</h2>
-    <p class="workspace-subheading">Each portal gives you access only to what you need.</p>
+<!-- Portal selection -->
+<section class="portal-section">
+    <h2 class="portal-section-title">Select Your Portal</h2>
+    <p class="portal-section-sub">Each portal is secured and shows only what you need.</p>
 
-    <div class="workspace-grid">
+    <div class="portal-grid">
 
         <!-- Patient -->
-        <div class="workspace-card patient">
-            <div class="workspace-icon">🧑‍⚕️</div>
-            <h3>Patient</h3>
-            <p>Book appointments, view your medical history, check doctor schedules, and send feedback.</p>
-            <ul class="workspace-features">
-                <li>✓ Book & cancel appointments</li>
-                <li>✓ View doctor schedules</li>
-                <li>✓ Access medical history</li>
-                <li>✓ Submit feedback</li>
+        <div class="portal-card patient">
+            <div class="portal-card-top"></div>
+            <div class="portal-icon">🧑‍⚕️</div>
+            <h3>Patient Portal</h3>
+            <ul class="portal-features">
+                <li>Book & cancel appointments</li>
+                <li>View doctor schedules</li>
+                <li>Access medical history</li>
+                <li>Submit feedback</li>
             </ul>
-            <div class="workspace-actions">
-                <a class="button primary full" href="{% url 'login_patient' %}">Login as Patient</a>
+            <div class="portal-card-btn" style="display:flex;flex-direction:column;gap:10px;margin-top:auto">
+                <a class="button full btn-patient" href="{% url 'login_patient' %}">Login as Patient</a>
                 <a class="button full" href="{% url 'register' %}">New patient? Register</a>
             </div>
         </div>
 
         <!-- Doctor -->
-        <div class="workspace-card doctor">
-            <div class="workspace-icon">👨‍⚕️</div>
-            <h3>Doctor</h3>
-            <p>Review appointment requests from your patients, approve or cancel them, and track your schedule.</p>
-            <ul class="workspace-features">
-                <li>✓ View appointment requests</li>
-                <li>✓ Approve or cancel bookings</li>
-                <li>✓ Track today's schedule</li>
-                <li>✓ Mark appointments complete</li>
+        <div class="portal-card doctor">
+            <div class="portal-card-top"></div>
+            <div class="portal-icon">👨‍⚕️</div>
+            <h3>Doctor Portal</h3>
+            <ul class="portal-features">
+                <li>Review appointment requests</li>
+                <li>Approve or cancel bookings</li>
+                <li>Track today's schedule</li>
+                <li>Mark appointments complete</li>
             </ul>
-            <div class="workspace-actions">
-                <a class="button primary full" href="{% url 'login_doctor' %}">Login as Doctor</a>
+            <div class="portal-card-btn" style="margin-top:auto">
+                <a class="button full btn-doctor" href="{% url 'login_doctor' %}">Login as Doctor</a>
             </div>
         </div>
 
         <!-- Staff -->
-        <div class="workspace-card staff">
-            <div class="workspace-icon">🏥</div>
-            <h3>Clinic Staff</h3>
-            <p>Manage doctors, schedules, patient records, appointment approvals, and feedback from one dashboard.</p>
-            <ul class="workspace-features">
-                <li>✓ Manage doctors & schedules</li>
-                <li>✓ Approve appointments</li>
-                <li>✓ Maintain medical records</li>
-                <li>✓ Review patient feedback</li>
+        <div class="portal-card staff">
+            <div class="portal-card-top"></div>
+            <div class="portal-icon">🏥</div>
+            <h3>Clinic Staff Portal</h3>
+            <ul class="portal-features">
+                <li>Manage doctors & schedules</li>
+                <li>Approve appointments</li>
+                <li>Maintain medical records</li>
+                <li>Review patient feedback</li>
             </ul>
-            <div class="workspace-actions">
-                <a class="button primary full" href="{% url 'login_staff' %}">Login as Staff</a>
+            <div class="portal-card-btn" style="margin-top:auto">
+                <a class="button full btn-staff" href="{% url 'login_staff' %}">Login as Staff</a>
             </div>
         </div>
 

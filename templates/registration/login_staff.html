@@ -1,20 +1,19 @@
 {% extends 'appointments/base.html' %}
-
 {% block title %}Staff Login{% endblock %}
-
 {% block content %}
-<section class="portal-login-wrap">
-    <div class="portal-login-card staff">
-        <div class="portal-login-icon">🏥</div>
+<div class="portal-login-wrap">
+    <div class="portal-login-card">
+        <div class="portal-top-bar staff"></div>
+        <div style="font-size:48px;margin-bottom:12px">🏥</div>
         <h1>Clinic Staff Portal</h1>
-        <p class="muted">Login to manage doctors, schedules, and appointments.</p>
+        <p class="muted" style="margin-bottom:20px">Login to manage clinic operations.</p>
         <form method="post" class="form-grid">
             {% csrf_token %}
             {% include 'appointments/partials_form_fields.html' %}
-            <button class="button primary" type="submit">Login</button>
+            <button class="button primary" type="submit" style="background:#7c3aed;border-color:#7c3aed">Login</button>
         </form>
-        <p class="muted" style="margin-top:12px;"><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
-        <p class="muted portal-back"><a href="{% url 'home' %}">← Back to portal selection</a></p>
+        <p class="muted" style="margin-top:14px;font-size:13px"><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+        <p class="portal-back"><a href="{% url 'home' %}">← Back to portal selection</a></p>
     </div>
-</section>
+</div>
 {% endblock %}
