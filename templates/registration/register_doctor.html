@@ -1,0 +1,26 @@
+{% extends 'appointments/base.html' %}
+{% block title %}Doctor Registration{% endblock %}
+{% block content %}
+<div class="portal-login-wrap">
+    <div class="portal-login-card" style="max-width:500px">
+        <div class="portal-top-bar doctor"></div>
+        <div style="font-size:48px;margin-bottom:12px">👨‍⚕️</div>
+        <h1>Doctor Registration</h1>
+        <p class="muted" style="margin-bottom:20px">Create your doctor account to manage appointments.</p>
+        <form method="post" class="form-grid">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small class="muted">{{ field.help_text }}</small>{% endif %}
+                {% if field.errors %}<span class="error">{{ field.errors|join:", " }}</span>{% endif %}
+            </div>
+            {% endfor %}
+            <button class="button full" type="submit" style="background:#059669;color:#fff;border-color:#059669;margin-top:8px">Create Doctor Account</button>
+        </form>
+        <p class="muted" style="margin-top:14px;font-size:13px">Already have an account? <a href="{% url 'login_doctor' %}">Login here</a>.</p>
+        <p class="portal-back"><a href="{% url 'home' %}">← Back to portal selection</a></p>
+    </div>
+</div>
+{% endblock %}

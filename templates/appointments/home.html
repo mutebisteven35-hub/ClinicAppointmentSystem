@@ -59,8 +59,9 @@
                 <li>Track today's schedule</li>
                 <li>Mark appointments complete</li>
             </ul>
-            <div class="portal-card-btn" style="margin-top:auto">
+            <div class="portal-card-btn" style="display:flex;flex-direction:column;gap:10px;margin-top:auto">
                 <a class="button full btn-doctor" href="{% url 'login_doctor' %}">Login as Doctor</a>
+                <a class="button full" href="{% url 'register_doctor' %}">New doctor? Register</a>
             </div>
         </div>
 
@@ -75,8 +76,9 @@
                 <li>Maintain medical records</li>
                 <li>Review patient feedback</li>
             </ul>
-            <div class="portal-card-btn" style="margin-top:auto">
+            <div class="portal-card-btn" style="display:flex;flex-direction:column;gap:10px;margin-top:auto">
                 <a class="button full btn-staff" href="{% url 'login_staff' %}">Login as Staff</a>
+                <a class="button full" href="{% url 'register_staff' %}">New staff? Register</a>
             </div>
         </div>
 

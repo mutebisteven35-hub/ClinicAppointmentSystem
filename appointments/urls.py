@@ -10,6 +10,8 @@ urlpatterns = [
     path('login/patient/', views.PatientLoginView.as_view(), name='login_patient'),
     path('login/doctor/', views.DoctorLoginView.as_view(), name='login_doctor'),
     path('login/staff/', views.StaffLoginView.as_view(), name='login_staff'),
+    path('register/doctor/', views.register_doctor, name='register_doctor'),
+    path('register/staff/', views.register_staff, name='register_staff'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     # Password reset

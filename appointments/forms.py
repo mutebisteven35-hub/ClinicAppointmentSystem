@@ -116,3 +116,55 @@ class FeedbackForm(forms.ModelForm):
         widgets = {
             'message': forms.Textarea(attrs={'rows': 5}),
         }
+
+
+class DoctorRegistrationForm(UserCreationForm):
+    first_name = forms.CharField(max_length=80, label='First Name')
+    last_name = forms.CharField(max_length=80, label='Last Name')
+    email = forms.EmailField(label='Email Address')
+    specialization = forms.CharField(max_length=120, label='Specialization')
+    phone = forms.CharField(max_length=30, label='Phone Number', required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'specialization', 'phone', 'password1', 'password2']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+            from .models import Doctor, DoctorProfile
+            doctor = Doctor.objects.create(
+                name=f"{self.cleaned_data['first_name']} {self.cleaned_data['last_name']}",
+                specialization=self.cleaned_data['specialization'],
+                phone=self.cleaned_data.get('phone', ''),
+                email=self.cleaned_data['email'],
+                is_active=True,
+            )
+            DoctorProfile.objects.create(user=user, doctor=doctor)
+        return user
+
+
+class StaffRegistrationForm(UserCreationForm):
+    first_name = forms.CharField(max_length=80, label='First Name')
+    last_name = forms.CharField(max_length=80, label='Last Name')
+    email = forms.EmailField(label='Email Address')
+    staff_role = forms.CharField(max_length=100, label='Role / Position', required=False,
+                                  help_text='e.g. Receptionist, Nurse, Administrator')
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'staff_role', 'password1', 'password2']
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
+        user.is_staff = True
+        if commit:
+            user.save()
+        return user

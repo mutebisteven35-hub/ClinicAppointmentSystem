@@ -9,6 +9,8 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 
 from .forms import (
+    DoctorRegistrationForm,
+    StaffRegistrationForm,
     AppointmentForm,
     AppointmentStatusForm,
     DoctorForm,
@@ -414,3 +416,33 @@ class StaffLoginView(auth_views.LoginView):
             messages.error(self.request, 'This login is for clinic staff only. Please use the correct portal.')
             return reverse('login_staff')
         return reverse('staff_dashboard')
+
+
+def register_doctor(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        form = DoctorRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, f'Doctor account created. Welcome, Dr. {user.first_name}!')
+            return redirect('doctor_dashboard')
+    else:
+        form = DoctorRegistrationForm()
+    return render(request, 'registration/register_doctor.html', {'form': form})
+
+
+def register_staff(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        form = StaffRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, f'Staff account created. Welcome, {user.first_name}!')
+            return redirect('staff_dashboard')
+    else:
+        form = StaffRegistrationForm()
+    return render(request, 'registration/register_staff.html', {'form': form})
