@@ -1,0 +1,108 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+<section class="section-heading">
+    <div>
+        <p class="eyebrow">Doctor workspace</p>
+        <h1>Welcome, Dr. {{ doctor.name }}</h1>
+        <p class="muted">{{ doctor.specialization }}</p>
+    </div>
+    <a class="button primary" href="{% url 'doctor_appointments' %}?status=Pending">Review pending</a>
+</section>
+
+<section class="summary-grid three">
+    <div class="stat-card">
+        <span class="stat-number">{{ pending_count }}</span>
+        <span class="stat-label">Pending Requests</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ today_count }}</span>
+        <span class="stat-label">Appointments Today</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-number">{{ total_patients }}</span>
+        <span class="stat-label">Patients Seen</span>
+    </div>
+</section>
+
+{% if pending %}
+<section class="panel">
+    <div class="section-heading compact">
+        <h2>⏳ Pending Appointment Requests</h2>
+        <a href="{% url 'doctor_appointments' %}?status=Pending">View all</a>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Reason</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in pending %}
+                <tr>
+                    <td>{{ appt.patient.get_full_name|default:appt.patient.username }}</td>
+                    <td>{{ appt.date }}</td>
+                    <td>{{ appt.time|time:"H:i" }}</td>
+                    <td>{{ appt.reason|truncatechars:60 }}</td>
+                    <td>
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="approve">
+                            <button class="button small primary" type="submit">Approve</button>
+                        </form>
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="cancel">
+                            <button class="button small danger" type="submit">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% else %}
+<section class="panel">
+    <p class="empty">✅ No pending appointment requests.</p>
+</section>
+{% endif %}
+
+{% if today_appointments %}
+<section class="panel">
+    <div class="section-heading compact">
+        <h2>📅 Today's Appointments</h2>
+    </div>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Patient</th><th>Time</th><th>Reason</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for appt in today_appointments %}
+                <tr>
+                    <td>{{ appt.patient.get_full_name|default:appt.patient.username }}</td>
+                    <td>{{ appt.time|time:"H:i" }}</td>
+                    <td>{{ appt.reason|truncatechars:60 }}</td>
+                    <td>
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="complete">
+                            <button class="button small" type="submit">Mark Complete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

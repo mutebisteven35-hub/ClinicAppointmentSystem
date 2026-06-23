@@ -10,6 +10,9 @@
         {% include 'appointments/partials_form_fields.html' %}
         <button class="button primary" type="submit">Login</button>
     </form>
+    <p class="muted" style="margin-top:12px;">
+        <a href="{% url 'password_reset' %}">Forgot your password?</a>
+    </p>
     <p class="muted">No patient account yet? <a href="{% url 'register' %}">Register here</a>.</p>
 </section>
 {% endblock %}

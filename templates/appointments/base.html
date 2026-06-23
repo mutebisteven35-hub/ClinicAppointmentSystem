@@ -22,6 +22,9 @@
                     <a href="{% url 'staff_schedules' %}">Schedules</a>
                     <a href="{% url 'staff_medical_history' %}">History</a>
                     <a href="{% url 'staff_feedback' %}">Feedback</a>
+                {% elif user.doctor_profile %}
+                    <a href="{% url 'doctor_dashboard' %}">Dashboard</a>
+                    <a href="{% url 'doctor_appointments' %}">Appointments</a>
                 {% else %}
                     <a href="{% url 'patient_dashboard' %}">Dashboard</a>
                     <a href="{% url 'book_appointment' %}">Book</a>

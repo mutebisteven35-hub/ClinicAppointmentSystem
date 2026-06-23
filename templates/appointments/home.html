@@ -3,32 +3,58 @@
 {% block title %}Clinic Appointment System{% endblock %}
 
 {% block content %}
-<section class="panel split-panel">
-    <div>
+<section class="hero-section">
+    <div class="hero-content">
+        <p class="eyebrow">Your Health, Our Priority</p>
         <h1 class="home-main-title">Medical Clinic Appointment Booking</h1>
         <p class="home-subtitle">Book appointments and manage clinic records in one system.</p>
         <p class="lead">Patients can register, view doctor schedules, request appointments, and send feedback. Clinic staff can approve appointments, manage doctors, update schedules, and keep medical history records.</p>
-        <div class="actions">
+        <div class="actions hero-actions">
             <a class="button primary" href="{% url 'register' %}">Create patient account</a>
             <a class="button" href="{% url 'login' %}">Login</a>
         </div>
     </div>
-    <div class="summary-grid">
-        <div class="stat-card">
-            <span class="stat-number">{{ doctor_count }}</span>
-            <span class="stat-label">Active doctors</span>
+    <div class="hero-visual">
+        <div class="hospital-card">
+            <div class="hospital-icon">🏥</div>
+            <h3>Welcome to Our Clinic</h3>
+            <p>Professional healthcare services at your fingertips.</p>
+            <div class="clinic-stats">
+                <div class="clinic-stat">
+                    <span class="clinic-stat-number">{{ doctor_count }}</span>
+                    <span class="clinic-stat-label">Active Doctors</span>
+                </div>
+                <div class="clinic-stat">
+                    <span class="clinic-stat-number">{{ schedule_count }}</span>
+                    <span class="clinic-stat-label">Available Slots</span>
+                </div>
+            </div>
         </div>
-        <div class="stat-card">
-            <span class="stat-number">{{ schedule_count }}</span>
-            <span class="stat-label">Available schedules</span>
+    </div>
+</section>
+
+<section class="features-section">
+    <h2 class="features-title">How It Works</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>Register</h3>
+            <p>Create your patient account quickly and securely to get started.</p>
         </div>
-        <div class="stat-card">
-            <span class="stat-number">SQLite</span>
-            <span class="stat-label">Database</span>
+        <div class="feature-card">
+            <div class="feature-icon">🗓️</div>
+            <h3>Book Appointment</h3>
+            <p>Browse doctor schedules and request an appointment at your preferred time.</p>
         </div>
-        <div class="stat-card">
-            <span class="stat-number">Django</span>
-            <span class="stat-label">Framework</span>
+        <div class="feature-card">
+            <div class="feature-icon">✅</div>
+            <h3>Get Confirmed</h3>
+            <p>Clinic staff review and approve your appointment request promptly.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🩺</div>
+            <h3>Visit the Doctor</h3>
+            <p>Attend your appointment and have your medical history safely recorded.</p>
         </div>
     </div>
 </section>

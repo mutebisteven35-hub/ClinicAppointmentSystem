@@ -1,0 +1,78 @@
+{% extends 'appointments/base.html' %}
+
+{% block title %}My Appointments{% endblock %}
+
+{% block content %}
+<section class="section-heading">
+    <div>
+        <p class="eyebrow">Doctor workspace</p>
+        <h1>Appointments — Dr. {{ doctor.name }}</h1>
+    </div>
+    <a class="button" href="{% url 'doctor_dashboard' %}">← Dashboard</a>
+</section>
+
+<section class="panel">
+    <div class="inline-filter" style="margin-bottom:16px;">
+        <span>Filter:</span>
+        <a class="button small {% if not status %}primary{% endif %}" href="{% url 'doctor_appointments' %}">All</a>
+        {% for value, label in status_choices %}
+        <a class="button small {% if status == value %}primary{% endif %}" href="?status={{ value }}">{{ label }}</a>
+        {% endfor %}
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in appointments %}
+                <tr>
+                    <td>{{ appt.patient.get_full_name|default:appt.patient.username }}</td>
+                    <td>{{ appt.date }}</td>
+                    <td>{{ appt.time|time:"H:i" }}</td>
+                    <td>{{ appt.reason|truncatechars:50 }}</td>
+                    <td><span class="badge {{ appt.status|lower }}">{{ appt.status }}</span></td>
+                    <td>
+                        {% if appt.status == 'Pending' %}
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="approve">
+                            <button class="button small primary" type="submit">Approve</button>
+                        </form>
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="cancel">
+                            <button class="button small danger" type="submit">Cancel</button>
+                        </form>
+                        {% elif appt.status == 'Approved' %}
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="complete">
+                            <button class="button small" type="submit">Complete</button>
+                        </form>
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="cancel">
+                            <button class="button small danger" type="submit">Cancel</button>
+                        </form>
+                        {% else %}
+                        <span class="muted">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="empty">No appointments found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

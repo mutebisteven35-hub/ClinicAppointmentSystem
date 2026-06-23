@@ -143,3 +143,12 @@ class Feedback(models.Model):
         return f'{self.subject} from {self.patient.username}'
 
 # Create your models here.
+
+
+class DoctorProfile(models.Model):
+    """Links a Django User account to a Doctor record for doctor login."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor_profile')
+    doctor = models.OneToOneField(Doctor, on_delete=models.CASCADE, related_name='profile')
+
+    def __str__(self):
+        return f'Profile for Dr. {self.doctor.name}'

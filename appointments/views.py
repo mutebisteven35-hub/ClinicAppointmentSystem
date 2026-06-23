@@ -296,3 +296,76 @@ def _save_form(request, form_class, template_name, redirect_name, success_messag
     return render(request, template_name, {'form': form, 'object': instance})
 
 # Create your views here.
+
+
+def doctor_required(view_func):
+    """Allow access only to users who have a linked DoctorProfile."""
+    from .models import DoctorProfile
+
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            from django.contrib.auth.views import redirect_to_login
+            return redirect_to_login(request.get_full_path())
+        if not hasattr(request.user, 'doctor_profile'):
+            messages.error(request, 'You do not have a doctor account.')
+            return redirect('home')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+@doctor_required
+def doctor_dashboard(request):
+    from .models import DoctorProfile
+    doctor = request.user.doctor_profile.doctor
+    pending = Appointment.objects.filter(doctor=doctor, status=Appointment.PENDING).select_related('patient').order_by('date', 'time')
+    today_appointments = Appointment.objects.filter(doctor=doctor, date=timezone.localdate(), status=Appointment.APPROVED).select_related('patient')
+    return render(request, 'appointments/doctor/dashboard.html', {
+        'doctor': doctor,
+        'pending': pending,
+        'pending_count': pending.count(),
+        'today_count': today_appointments.count(),
+        'today_appointments': today_appointments,
+        'total_patients': Appointment.objects.filter(doctor=doctor, status=Appointment.APPROVED).values('patient').distinct().count(),
+    })
+
+
+@doctor_required
+def doctor_appointments(request):
+    doctor = request.user.doctor_profile.doctor
+    status = request.GET.get('status', '')
+    appointments = Appointment.objects.filter(doctor=doctor).select_related('patient')
+    if status:
+        appointments = appointments.filter(status=status)
+    return render(request, 'appointments/doctor/appointments.html', {
+        'appointments': appointments,
+        'status': status,
+        'status_choices': Appointment.STATUS_CHOICES,
+        'doctor': doctor,
+    })
+
+
+@doctor_required
+def doctor_appointment_action(request, pk):
+    doctor = request.user.doctor_profile.doctor
+    appointment = get_object_or_404(Appointment, pk=pk, doctor=doctor)
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        note = request.POST.get('admin_note', '').strip()
+        if action == 'approve' and appointment.status == Appointment.PENDING:
+            appointment.status = Appointment.APPROVED
+            appointment.admin_note = note
+            appointment.save(update_fields=['status', 'admin_note', 'updated_at'])
+            messages.success(request, 'Appointment approved.')
+        elif action == 'cancel' and appointment.status in [Appointment.PENDING, Appointment.APPROVED]:
+            appointment.status = Appointment.CANCELLED
+            appointment.admin_note = note
+            appointment.save(update_fields=['status', 'admin_note', 'updated_at'])
+            messages.success(request, 'Appointment cancelled.')
+        elif action == 'complete' and appointment.status == Appointment.APPROVED:
+            appointment.status = Appointment.COMPLETED
+            appointment.admin_note = note
+            appointment.save(update_fields=['status', 'admin_note', 'updated_at'])
+            messages.success(request, 'Appointment marked as completed.')
+        else:
+            messages.warning(request, 'Invalid action or appointment state.')
+    return redirect('doctor_appointments')
