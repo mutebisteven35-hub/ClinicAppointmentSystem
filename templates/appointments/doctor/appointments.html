@@ -3,24 +3,37 @@
 {% block title %}My Appointments{% endblock %}
 
 {% block content %}
-<section class="section-heading">
+<div class="section-heading">
     <div>
         <p class="eyebrow">Doctor workspace</p>
         <h1>Appointments — Dr. {{ doctor.name }}</h1>
     </div>
     <a class="button" href="{% url 'doctor_dashboard' %}">← Dashboard</a>
-</section>
+</div>
 
-<section class="panel">
-    <div class="inline-filter" style="margin-bottom:16px;">
-        <span>Filter:</span>
-        <a class="button small {% if not status %}primary{% endif %}" href="{% url 'doctor_appointments' %}">All</a>
+<div class="panel">
+    <!-- Filter bar -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #d9e2ec">
+        <span style="font-weight:600;font-size:14px;color:#1f2937">Filter by status:</span>
+        <a href="{% url 'doctor_appointments' %}"
+           style="padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1.5px solid {% if not status %}#1a56a0{% else %}#d9e2ec{% endif %};background:{% if not status %}#1a56a0{% else %}#fff{% endif %};color:{% if not status %}#fff{% else %}#1f2937{% endif %};text-decoration:none">
+            All
+        </a>
         {% for value, label in status_choices %}
-        <a class="button small {% if status == value %}primary{% endif %}" href="?status={{ value }}">{{ label }}</a>
+        <a href="?status={{ value }}"
+           style="padding:7px 16px;border-radius:8px;font-size:13px;font-weight:600;border:1.5px solid {% if status == value %}#1a56a0{% else %}#d9e2ec{% endif %};background:{% if status == value %}#1a56a0{% else %}#fff{% endif %};color:{% if status == value %}#fff{% else %}#1f2937{% endif %};text-decoration:none">
+            {{ label }}
+        </a>
         {% endfor %}
     </div>
 
-    <div class="table-wrap">
+    <!-- Results count -->
+    <p style="font-size:13px;color:#64748b;margin-bottom:14px">
+        Showing <strong>{{ appointments|length }}</strong> appointment{{ appointments|length|pluralize }}
+        {% if status %} with status <strong>{{ status }}</strong>{% endif %}
+    </p>
+
+    <div style="overflow-x:auto">
         <table>
             <thead>
                 <tr>
@@ -39,40 +52,54 @@
                     <td>{{ appt.date }}</td>
                     <td>{{ appt.time|time:"H:i" }}</td>
                     <td>{{ appt.reason|truncatechars:50 }}</td>
-                    <td><span class="badge {{ appt.status|lower }}">{{ appt.status }}</span></td>
                     <td>
+                        {% if appt.status == 'Pending' %}
+                            <span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#fef9c3;color:#854d0e">Pending</span>
+                        {% elif appt.status == 'Approved' %}
+                            <span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#dcfce7;color:#166534">Approved</span>
+                        {% elif appt.status == 'Cancelled' %}
+                            <span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#fee2e2;color:#991b1b">Cancelled</span>
+                        {% elif appt.status == 'Completed' %}
+                            <span style="display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;background:#e0e7ff;color:#3730a3">Completed</span>
+                        {% endif %}
+                    </td>
+                    <td style="white-space:nowrap">
                         {% if appt.status == 'Pending' %}
                         <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
                             {% csrf_token %}
                             <input type="hidden" name="action" value="approve">
-                            <button class="button small primary" type="submit">Approve</button>
+                            <button style="padding:5px 12px;background:#059669;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer" type="submit">Approve</button>
                         </form>
-                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline;margin-left:6px">
                             {% csrf_token %}
                             <input type="hidden" name="action" value="cancel">
-                            <button class="button small danger" type="submit">Cancel</button>
+                            <button style="padding:5px 12px;background:#dc2626;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer" type="submit">Cancel</button>
                         </form>
                         {% elif appt.status == 'Approved' %}
                         <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
                             {% csrf_token %}
                             <input type="hidden" name="action" value="complete">
-                            <button class="button small" type="submit">Complete</button>
+                            <button style="padding:5px 12px;background:#1a56a0;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer" type="submit">Complete</button>
                         </form>
-                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline">
+                        <form method="post" action="{% url 'doctor_appointment_action' appt.pk %}" style="display:inline;margin-left:6px">
                             {% csrf_token %}
                             <input type="hidden" name="action" value="cancel">
-                            <button class="button small danger" type="submit">Cancel</button>
+                            <button style="padding:5px 12px;background:#dc2626;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer" type="submit">Cancel</button>
                         </form>
                         {% else %}
-                        <span class="muted">—</span>
+                        <span style="color:#64748b;font-size:13px">—</span>
                         {% endif %}
                     </td>
                 </tr>
                 {% empty %}
-                <tr><td colspan="6" class="empty">No appointments found.</td></tr>
+                <tr>
+                    <td colspan="6" style="text-align:center;padding:40px;color:#64748b">
+                        No appointments found{% if status %} with status "{{ status }}"{% endif %}.
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-</section>
+</div>
 {% endblock %}

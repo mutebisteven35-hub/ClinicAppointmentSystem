@@ -335,12 +335,16 @@ def doctor_dashboard(request):
 
 
 @doctor_required
+@doctor_required
 def doctor_appointments(request):
     doctor = request.user.doctor_profile.doctor
-    status = request.GET.get('status', '')
-    appointments = Appointment.objects.filter(doctor=doctor).select_related('patient')
-    if status:
+    status = request.GET.get('status', '').strip()
+    appointments = Appointment.objects.filter(doctor=doctor).select_related('patient').order_by('-date', '-time')
+    valid_statuses = [s[0] for s in Appointment.STATUS_CHOICES]
+    if status and status in valid_statuses:
         appointments = appointments.filter(status=status)
+    else:
+        status = ''
     return render(request, 'appointments/doctor/appointments.html', {
         'appointments': appointments,
         'status': status,
