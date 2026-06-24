@@ -124,10 +124,17 @@ class DoctorRegistrationForm(UserCreationForm):
     email = forms.EmailField(label='Email Address')
     specialization = forms.CharField(max_length=120, label='Specialization')
     phone = forms.CharField(max_length=30, label='Phone Number', required=False)
+    existing_doctor = forms.ModelChoiceField(
+        queryset=Doctor.objects.filter(is_active=True, profile__isnull=True),
+        required=False,
+        label='Link to existing Doctor record (optional)',
+        help_text='If your name already exists in the system (added by staff), select it here so your appointments are linked correctly. Otherwise leave blank.',
+        empty_label='— I am not yet in the system, create my record —',
+    )
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'specialization', 'phone', 'password1', 'password2']
+        fields = ['username', 'first_name', 'last_name', 'email', 'existing_doctor', 'specialization', 'phone', 'password1', 'password2']
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -136,14 +143,19 @@ class DoctorRegistrationForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         if commit:
             user.save()
-            from .models import Doctor, DoctorProfile
-            doctor = Doctor.objects.create(
-                name=f"{self.cleaned_data['first_name']} {self.cleaned_data['last_name']}",
-                specialization=self.cleaned_data['specialization'],
-                phone=self.cleaned_data.get('phone', ''),
-                email=self.cleaned_data['email'],
-                is_active=True,
-            )
+            from .models import DoctorProfile
+            existing = self.cleaned_data.get('existing_doctor')
+            if existing:
+                # Link to the existing doctor record so all their appointments show up
+                doctor = existing
+            else:
+                doctor = Doctor.objects.create(
+                    name=f"{self.cleaned_data['first_name']} {self.cleaned_data['last_name']}",
+                    specialization=self.cleaned_data['specialization'],
+                    phone=self.cleaned_data.get('phone', ''),
+                    email=self.cleaned_data['email'],
+                    is_active=True,
+                )
             DoctorProfile.objects.create(user=user, doctor=doctor)
         return user
 
